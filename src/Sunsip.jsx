@@ -6,10 +6,10 @@ import {
   Instagram, Facebook, Twitter, Heart, Search, Flame, Droplet,
 } from 'lucide-react';
 
-// ── AI image helper (Pollinations.ai · flux model, no API key needed) ────
-const QUALITY_SUFFIX = ', professional food photography, magazine cover, hyperrealistic, ultra detailed, cinematic lighting, vibrant colors, mouth-watering, 8k, sharp focus, beautiful composition, no text, no watermark';
-const aiImg = (prompt, seed = 1, w = 1024, h = 1024) =>
-  `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt + QUALITY_SUFFIX)}?width=${w}&height=${h}&nologo=true&enhance=true&model=flux&seed=${seed}`;
+// ── AI image helper (Pollinations.ai · turbo model · ~1-2s real-time) ────
+const QUALITY_SUFFIX = ', professional food photography, hyperrealistic, vibrant colors, sharp focus, mouth-watering, no text, no watermark';
+const aiImg = (prompt, seed = 1, w = 768, h = 768) =>
+  `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt + QUALITY_SUFFIX)}?width=${w}&height=${h}&nologo=true&model=turbo&seed=${seed}`;
 
 const inr = (n) => '₹' + Number(n).toLocaleString('en-IN');
 
