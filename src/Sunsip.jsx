@@ -6,35 +6,36 @@ import {
   Instagram, Facebook, Twitter, Heart, Search, Flame, Droplet,
 } from 'lucide-react';
 
-// ── AI image helper (Pollinations.ai · no API key required) ───────────────
-const aiImg = (prompt, seed = 1, w = 700, h = 700) =>
-  `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=${w}&height=${h}&nologo=true&seed=${seed}`;
+// ── AI image helper (Pollinations.ai · flux model, no API key needed) ────
+const QUALITY_SUFFIX = ', professional food photography, magazine cover, hyperrealistic, ultra detailed, cinematic lighting, vibrant colors, mouth-watering, 8k, sharp focus, beautiful composition, no text, no watermark';
+const aiImg = (prompt, seed = 1, w = 1024, h = 1024) =>
+  `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt + QUALITY_SUFFIX)}?width=${w}&height=${h}&nologo=true&enhance=true&model=flux&seed=${seed}`;
 
 const inr = (n) => '₹' + Number(n).toLocaleString('en-IN');
 
 // ── Data ──────────────────────────────────────────────────────────────────
 const JUICES = [
-  { id: 'j1',  name: 'Mango Madness',     price: 180, fruit: '🥭', tint: 'from-yellow-300 to-orange-500',  desc: 'Alphonso pulp, ice, lime, hint of cardamom.',           prompt: 'glass of fresh mango juice with mango fruit slices, summer drink, vibrant tropical, studio photography, top-lit' },
-  { id: 'j2',  name: 'Watermelon Cooler', price: 150, fruit: '🍉', tint: 'from-pink-300 to-rose-500',      desc: 'Chilled watermelon, mint, rock salt, sparkling.',        prompt: 'glass of fresh watermelon juice with mint leaves, pink summer drink, condensation, vibrant photography' },
-  { id: 'j3',  name: 'Pineapple Punch',   price: 170, fruit: '🍍', tint: 'from-yellow-200 to-amber-400',   desc: 'Golden pineapple, ginger zing, basil seeds.',            prompt: 'glass of pineapple juice with pineapple chunks, tropical summer cocktail, vibrant yellow' },
-  { id: 'j4',  name: 'Strawberry Bliss',  price: 200, fruit: '🍓', tint: 'from-rose-200 to-red-500',       desc: 'Hand-pressed strawberries, honey, oat milk.',            prompt: 'glass of strawberry smoothie with fresh strawberries on top, pink red, creamy, summer treat' },
-  { id: 'j5',  name: 'Lychee Sparkle',    price: 220, fruit: '🥂', tint: 'from-rose-100 to-pink-300',      desc: 'Lychee, rose, soda — like summer in a glass.',           prompt: 'glass of lychee soda with rose petals, bubbly clear pink drink, summer cocktail, elegant' },
-  { id: 'j6',  name: 'Orange Sunrise',    price: 140, fruit: '🍊', tint: 'from-orange-200 to-orange-500',  desc: 'Fresh-squeezed Nagpur oranges, no sugar.',               prompt: 'glass of fresh orange juice with orange slices, vibrant orange, breakfast summer drink' },
-  { id: 'j7',  name: 'Coconut Water',     price: 120, fruit: '🥥', tint: 'from-stone-100 to-amber-200',    desc: 'Tender coconut, scooped malai, lime.',                   prompt: 'fresh coconut water with malai pieces, tropical drink, beach vibe, natural light' },
-  { id: 'j8',  name: 'Pomegranate Power', price: 190, fruit: '🍷', tint: 'from-red-300 to-red-700',        desc: 'Anaar arils crushed slow, beet boost.',                  prompt: 'glass of pomegranate juice with pomegranate seeds on top, deep red, rustic photography' },
-  { id: 'j9',  name: 'Kiwi Crush',        price: 180, fruit: '🥝', tint: 'from-lime-200 to-green-500',     desc: 'Two kiwis, ginger, apple, spinach.',                     prompt: 'glass of kiwi green smoothie with kiwi slices, vibrant green, healthy summer drink' },
-  { id: 'j10', name: 'Guava Glow',        price: 130, fruit: '🍐', tint: 'from-lime-100 to-emerald-300',   desc: 'Pink guava, chaat masala, rock salt.',                   prompt: 'glass of pink guava juice with guava fruit, summer indian street drink, vibrant' },
-  { id: 'j11', name: 'Mixed Berry Boost', price: 230, fruit: '🫐', tint: 'from-fuchsia-300 to-purple-600', desc: 'Blueberry, blackberry, raspberry, banana.',              prompt: 'mixed berry smoothie with blueberries strawberries on top, purple drink, nourish bowl style' },
-  { id: 'j12', name: 'Sugarcane Splash',  price: 100, fruit: '🌾', tint: 'from-green-200 to-emerald-500',  desc: 'Pressed-to-order, ginger and lime.',                     prompt: 'glass of fresh sugarcane juice with sugarcane stalks, indian street drink, condensation' },
+  { id: 'j1',  name: 'Mango Madness',     price: 180, fruit: '🥭', tint: 'from-yellow-300 to-orange-500',  desc: 'Alphonso pulp, ice, lime, hint of cardamom.',           prompt: 'tall crystal glass of fresh alphonso mango juice topped with mango chunks and mint leaves, ice cubes, dripping condensation, golden hour sunlight, rustic wooden table, lush mango fruits in background' },
+  { id: 'j2',  name: 'Watermelon Cooler', price: 150, fruit: '🍉', tint: 'from-pink-300 to-rose-500',      desc: 'Chilled watermelon, mint, rock salt, sparkling.',        prompt: 'elegant tall glass of vibrant pink watermelon juice with watermelon slice on rim, mint leaves, ice, sparkling water bubbles, beach picnic background blurred bokeh, summer sun' },
+  { id: 'j3',  name: 'Pineapple Punch',   price: 170, fruit: '🍍', tint: 'from-yellow-200 to-amber-400',   desc: 'Golden pineapple, ginger zing, basil seeds.',            prompt: 'mason jar of golden pineapple juice with pineapple wedge garnish, basil seeds, fresh ginger, ice cubes, tropical hawaiian background, palm leaves blurred' },
+  { id: 'j4',  name: 'Strawberry Bliss',  price: 200, fruit: '🍓', tint: 'from-rose-200 to-red-500',       desc: 'Hand-pressed strawberries, honey, oat milk.',            prompt: 'creamy strawberry milkshake in vintage tall glass with whole fresh strawberries on top, whipped cream, strawberry drizzle, dreamy pink bokeh background' },
+  { id: 'j5',  name: 'Lychee Sparkle',    price: 220, fruit: '🥂', tint: 'from-rose-100 to-pink-300',      desc: 'Lychee, rose, soda — like summer in a glass.',           prompt: 'elegant champagne flute of clear pink lychee rose soda with floating rose petals, fresh lychee fruits, fizzy bubbles, romantic candlelit fine dining backdrop' },
+  { id: 'j6',  name: 'Orange Sunrise',    price: 140, fruit: '🍊', tint: 'from-orange-200 to-orange-500',  desc: 'Fresh-squeezed Nagpur oranges, no sugar.',               prompt: 'tall glass of freshly squeezed orange juice with orange slices and ice, morning sunlight streaming through window, breakfast table with toast and fresh oranges' },
+  { id: 'j7',  name: 'Coconut Water',     price: 120, fruit: '🥥', tint: 'from-stone-100 to-amber-200',    desc: 'Tender coconut, scooped malai, lime.',                   prompt: 'fresh young green coconut cracked open with bamboo straw, creamy white malai pieces inside, tropical beach sand background, palm leaves, golden afternoon light' },
+  { id: 'j8',  name: 'Pomegranate Power', price: 190, fruit: '🍷', tint: 'from-red-300 to-red-700',        desc: 'Anaar arils crushed slow, beet boost.',                  prompt: 'elegant crystal glass of deep ruby red pomegranate juice with scattered pomegranate seeds, dark moody dramatic lighting, luxurious marble surface' },
+  { id: 'j9',  name: 'Kiwi Crush',        price: 180, fruit: '🥝', tint: 'from-lime-200 to-green-500',     desc: 'Two kiwis, ginger, apple, spinach.',                     prompt: 'mason jar of vibrant green kiwi smoothie with kiwi slices on rim and chia seeds, healthy lifestyle aesthetic, bright fresh herbs and apple slices around, instagram-worthy flat lay' },
+  { id: 'j10', name: 'Guava Glow',        price: 130, fruit: '🍐', tint: 'from-lime-100 to-emerald-300',   desc: 'Pink guava, chaat masala, rock salt.',                   prompt: 'pink guava juice in traditional indian clay cup with chaat masala rim, sliced pink guava on side, vibrant pink color, candid indian street food photography' },
+  { id: 'j11', name: 'Mixed Berry Boost', price: 230, fruit: '🫐', tint: 'from-fuchsia-300 to-purple-600', desc: 'Blueberry, blackberry, raspberry, banana.',              prompt: 'deep purple acai berry smoothie bowl topped with blueberries raspberries blackberries banana slices and granola, top-down overhead shot, healthy breakfast styling' },
+  { id: 'j12', name: 'Sugarcane Splash',  price: 100, fruit: '🌾', tint: 'from-green-200 to-emerald-500',  desc: 'Pressed-to-order, ginger and lime.',                     prompt: 'tall steel tumbler of fresh green sugarcane juice with crushed ice and lime wedge, indian street vendor sugarcane press blurred in background, condensation droplets, candid documentary' },
 ];
 
 const ICECREAMS = [
-  { id: 'i1', name: 'Mango Sorbet',     price: 150, fruit: '🍨', tint: 'from-yellow-200 to-orange-400',   desc: 'Dairy-free Alphonso sorbet, real fruit chunks.',  prompt: 'mango sorbet ice cream scoop in glass cup with mango chunks, vibrant orange yellow, summer dessert' },
-  { id: 'i2', name: 'Strawberry Scoop', price: 140, fruit: '🍓', tint: 'from-rose-200 to-pink-500',       desc: 'Slow-churned, with whole berries.',               prompt: 'strawberry ice cream scoop with fresh strawberries, pink dessert, soft serve, summer' },
-  { id: 'i3', name: 'Vanilla Bean',     price: 130, fruit: '🍦', tint: 'from-amber-100 to-amber-300',     desc: 'Madagascar vanilla, double cream.',               prompt: 'vanilla bean ice cream scoop with vanilla pod, cream colored, classic dessert photography' },
-  { id: 'i4', name: 'Coconut Cream',    price: 150, fruit: '🥥', tint: 'from-stone-100 to-stone-300',     desc: 'Coconut milk, toasted flakes on top.',            prompt: 'coconut ice cream scoop with toasted coconut flakes, white cream dessert, tropical' },
-  { id: 'i5', name: 'Pistachio Kulfi',  price: 160, fruit: '🥜', tint: 'from-lime-100 to-emerald-300',    desc: 'Slow-cooked milk, pistachio shavings.',           prompt: 'pistachio kulfi indian ice cream with pistachio nuts on top, green pale, dessert photography' },
-  { id: 'i6', name: 'Chocolate Fudge',  price: 160, fruit: '🍫', tint: 'from-amber-700 to-amber-900',     desc: 'Dark chocolate, fudge ribbon, sea salt.',         prompt: 'chocolate fudge ice cream scoop with chocolate sauce dripping, dark brown dessert' },
+  { id: 'i1', name: 'Mango Sorbet',     price: 150, fruit: '🍨', tint: 'from-yellow-200 to-orange-400',   desc: 'Dairy-free Alphonso sorbet, real fruit chunks.',  prompt: 'two perfect scoops of vibrant orange mango sorbet in elegant crystal coupe with fresh mango chunks and mint leaf garnish, dripping condensation, summer dessert styling' },
+  { id: 'i2', name: 'Strawberry Scoop', price: 140, fruit: '🍓', tint: 'from-rose-200 to-pink-500',       desc: 'Slow-churned, with whole berries.',               prompt: 'double scoop of pink strawberry ice cream in vintage waffle cone bowl with fresh whole strawberries scattered, dreamy soft pink dessert backdrop' },
+  { id: 'i3', name: 'Vanilla Bean',     price: 130, fruit: '🍦', tint: 'from-amber-100 to-amber-300',     desc: 'Madagascar vanilla, double cream.',               prompt: 'classic creamy vanilla bean ice cream scoop with visible vanilla bean specks, vanilla pod garnish, elegant porcelain bowl, minimalist soft natural lighting' },
+  { id: 'i4', name: 'Coconut Cream',    price: 150, fruit: '🥥', tint: 'from-stone-100 to-stone-300',     desc: 'Coconut milk, toasted flakes on top.',            prompt: 'creamy coconut ice cream scoop served in real coconut shell with toasted coconut flakes on top, tropical beach aesthetic, palm leaf shadows' },
+  { id: 'i5', name: 'Pistachio Kulfi',  price: 160, fruit: '🥜', tint: 'from-lime-100 to-emerald-300',    desc: 'Slow-cooked milk, pistachio shavings.',           prompt: 'traditional indian pistachio kulfi on wooden stick coated with crushed pistachios, pale green color, rustic terracotta plate, warm golden lighting' },
+  { id: 'i6', name: 'Chocolate Fudge',  price: 160, fruit: '🍫', tint: 'from-amber-700 to-amber-900',     desc: 'Dark chocolate, fudge ribbon, sea salt.',         prompt: 'rich dark chocolate fudge ice cream scoop with hot chocolate sauce dripping down, chocolate shavings, sea salt flakes, decadent dessert dramatic moody lighting' },
 ];
 
 const ALL_ITEMS = [...JUICES, ...ICECREAMS];
@@ -485,22 +486,22 @@ export default function Sunsip() {
           {/* Right collage — AI visuals */}
           <div className="lg:col-span-6 relative" style={{height:'520px'}}>
             <div className="absolute top-0 right-6 w-56 h-72 rounded-3xl shadow-2xl overflow-hidden bg-orange-200 sun-float-slow" style={{'--r':'4deg', transform:'rotate(4deg)'}}>
-              <img src={aiImg('a tall glass of fresh mango juice with mango chunks and ice, summer cold drink, vibrant orange yellow, condensation', 11, 600, 800)} alt="Mango"
+              <img src={aiImg('a tall elegant glass of vibrant golden mango juice topped with alphonso mango chunks and mint leaves, dripping condensation, ice cubes, fresh mango slices on side, golden hour sunlight, lush tropical setting, summer cold drink', 11, 768, 1024)} alt="Mango"
                 className="w-full h-full object-cover sun-img-in" loading="lazy" onError={e=>e.currentTarget.style.display='none'}/>
               <div className="absolute bottom-2 left-2 bg-white/90 text-orange-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-widest flex items-center gap-1"><Sparkles size={9}/> AI</div>
             </div>
             <div className="absolute top-12 left-0 w-52 h-64 rounded-3xl shadow-2xl overflow-hidden bg-pink-200 sun-float" style={{'--r':'-7deg', transform:'rotate(-7deg)'}}>
-              <img src={aiImg('a glass of strawberry watermelon smoothie, pink summer drink, fresh berries on top, vibrant', 22, 600, 800)} alt="Berry"
+              <img src={aiImg('elegant tall glass of vibrant pink strawberry watermelon smoothie with whole strawberries and watermelon wedge garnish, whipped cream peak, mint leaves, dreamy pink bokeh background, summer aesthetic', 22, 768, 1024)} alt="Berry"
                 className="w-full h-full object-cover sun-img-in" loading="lazy" onError={e=>e.currentTarget.style.display='none'}/>
               <div className="absolute bottom-2 left-2 bg-white/90 text-orange-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-widest flex items-center gap-1"><Sparkles size={9}/> AI</div>
             </div>
             <div className="absolute bottom-8 right-24 w-60 h-60 rounded-3xl shadow-2xl overflow-hidden bg-amber-200 sun-float-fast" style={{'--r':'8deg', transform:'rotate(8deg)'}}>
-              <img src={aiImg('two scoops of mango sorbet ice cream in a glass cup with mango pieces, summer dessert, vibrant', 33, 600, 600)} alt="Ice"
+              <img src={aiImg('two perfect scoops of vibrant orange mango sorbet ice cream in elegant crystal coupe glass, fresh mango chunks on top, mint leaf garnish, dripping condensation, dreamy summer dessert backdrop, golden warm lighting', 33, 768, 768)} alt="Ice"
                 className="w-full h-full object-cover sun-img-in" loading="lazy" onError={e=>e.currentTarget.style.display='none'}/>
               <div className="absolute bottom-2 left-2 bg-white/90 text-orange-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-widest flex items-center gap-1"><Sparkles size={9}/> AI</div>
             </div>
             <div className="absolute bottom-0 left-12 w-48 h-48 rounded-3xl shadow-2xl overflow-hidden bg-lime-200 sun-float" style={{'--r':'14deg', transform:'rotate(14deg)'}}>
-              <img src={aiImg('a glass of fresh kiwi smoothie with kiwi slices, vibrant green summer drink, healthy', 44, 600, 600)} alt="Kiwi"
+              <img src={aiImg('vibrant green kiwi smoothie in mason jar with kiwi slices on rim and chia seeds, fresh herbs, healthy lifestyle aesthetic, bright airy kitchen background, instagram worthy', 44, 768, 768)} alt="Kiwi"
                 className="w-full h-full object-cover sun-img-in" loading="lazy" onError={e=>e.currentTarget.style.display='none'}/>
               <div className="absolute bottom-2 left-2 bg-white/90 text-orange-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-widest flex items-center gap-1"><Sparkles size={9}/> AI</div>
             </div>
