@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #fff7ed;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* Entry */
+@keyframes sun-fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.sun-in { animation: sun-fade-up 0.7s ease-out both; }
+
+@keyframes sun-zoom {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.sun-zoom { animation: sun-zoom 0.5s cubic-bezier(.2,.8,.2,1) both; }
+
+/* Floating fruits */
+@keyframes sun-float {
+  0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); }
+  50%      { transform: translateY(-18px) rotate(var(--r, 0deg)); }
+}
+.sun-float       { animation: sun-float 5s ease-in-out infinite; }
+.sun-float-slow  { animation: sun-float 7s ease-in-out infinite; }
+.sun-float-fast  { animation: sun-float 3.2s ease-in-out infinite; }
+
+/* Bubble rising */
+@keyframes sun-bubble {
+  0%   { transform: translateY(0) scale(0.6); opacity: 0; }
+  20%  { opacity: 0.9; }
+  100% { transform: translateY(-120vh) scale(1.1); opacity: 0; }
+}
+.sun-bubble { animation: sun-bubble 9s linear infinite; }
+
+/* Slow spin (for sun rays) */
+@keyframes sun-spin { to { transform: rotate(360deg); } }
+.sun-spin-slow { animation: sun-spin 22s linear infinite; }
+
+/* Pulse glow */
+@keyframes sun-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.55); }
+  50%      { box-shadow: 0 0 0 16px rgba(249, 115, 22, 0); }
+}
+.sun-pulse { animation: sun-pulse 2.4s ease-out infinite; }
+
+/* Shimmer sweep */
+@keyframes sun-shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+.sun-shimmer { position: relative; overflow: hidden; }
+.sun-shimmer::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.45) 50%, transparent 70%);
+  animation: sun-shimmer 3.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Marquee */
+@keyframes sun-marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.sun-marquee { animation: sun-marquee 22s linear infinite; }
+
+/* Gradient shift backgrounds */
+@keyframes sun-grad-shift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.sun-grad-bg {
+  background: linear-gradient(120deg, #fed7aa, #fdba74, #fb923c, #f97316, #fdba74, #fed7aa);
+  background-size: 300% 300%;
+  animation: sun-grad-shift 14s ease infinite;
+}
+
+/* Card hover lift */
+.sun-card-hover {
+  transition: transform 350ms cubic-bezier(.2,.8,.2,1), box-shadow 350ms ease;
+}
+.sun-card-hover:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 30px 60px -20px rgba(249, 115, 22, 0.45);
+}
+
+/* Image fade in */
+.sun-img-in { animation: sun-fade-up 0.8s ease-out both; }
+
+/* Wobble (button) */
+@keyframes sun-wobble {
+  0%, 100% { transform: rotate(0); }
+  25%      { transform: rotate(-3deg); }
+  75%      { transform: rotate(3deg); }
+}
+.group:hover .sun-wobble-on-hover { animation: sun-wobble 0.5s ease-in-out; }
